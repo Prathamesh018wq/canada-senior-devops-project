@@ -36,3 +36,11 @@ jobs:
     - name: Push Docker Image
       run: |
         docker push 660405908881.dkr.ecr.ap-south-1.amazonaws.com/canada-devops-app:v1
+    - name: Update kubeconfig
+      run: |
+        aws eks update-kubeconfig --region ap-south-1 --name canada-devops-cluster
+
+    - name: Deploy to EKS
+      run: |
+        kubectl set image deployment/canada-devops-app canada-devops-container=660405908881.dkr.ecr.ap-south-1.amazonaws.com/canada-devops-app:v1
+        kubectl rollout status deployment/canada-devops-app
